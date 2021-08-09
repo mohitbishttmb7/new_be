@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <form action="http://localhost:4000/users/authenticate" method="POST">
+            <label>Authenticate User</label>
+            <br><br>
+            <label>Username</label><br>
+            <input type="text" name="username"><br>
+            <label>Password</label><br>
+            <input type="password" name="password" ><br>
+            <button type="submit">Send</button>
+        </form>
+    </div><br>
+    <div>
+        <form action="http://localhost:4000/emp/company" method="POST">
+            <label>Add company</label>
+            <br><br>
+            <label>Company Name</label><br>
+            <input type="text" name="company"><br>
+            <label>Address</label><br>
+            <input type="text" name="address" ><br>
+            <button type="submit">Send</button>
+        </form>
+    </div><br><br>
+    <div style="border:2px solid #111;">
+    <a href="http://localhost:4000/emp/getCompany">Get Company</a>
+    </div>
+</body>
+</html>
