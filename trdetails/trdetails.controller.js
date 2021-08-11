@@ -10,42 +10,40 @@ const { Collection } = require('mongoose');
 const CONNECTION_URL = config.connectionString;
 const DATABASE_NAME = "myFirstDatabase";
 
-MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false }, (error, client) => {
+MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
     if(error) {
         throw error;
     }
     database = client.db(DATABASE_NAME);
     collection_trDetails = database.collection("trDetails");
-    collection_user = database.collection("users");
-    collection_att = database.collection("employees_att");
-    console.log("Connected to `" + DATABASE_NAME + "`!");
+    // console.log("Connected to `" + DATABASE_NAME + "`!");
 });
-router.post("/addUser",(req,res)=>{
-    // create test user if the username is empty
-    var query = { username: req.body.username };
-    collection_user.find(query).toArray((err,result1)=>{
-		if (err) throw err;
-         var getQuery = result1;
-    if (getQuery.length === 0) {
-        const user = new db.User({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            username: req.body.username,
-            passwordHash: bcrypt.hashSync(req.body.passwordHash, 10),
-            role: req.body.role,
-            branch:req.body.branch
-        });
-       const save =  user.save((error,result)=>{
-           if(error){
-            return res.status(500).send(error);
-           }
-           res.send(result.result);
-       });
-    }else{
-        return res.status(404).send("User already exist!")
-   }
-   });
-});
+// router.post("/addUser",(req,res)=>{
+//     // create test user if the username is empty
+//     var query = { username: req.body.username };
+//     collection_user.find(query).toArray((err,result1)=>{
+// 		if (err) throw err;
+//          var getQuery = result1;
+//     if (getQuery.length === 0) {
+//         const user = new db.User({
+//             firstName: req.body.firstName,
+//             lastName: req.body.lastName,
+//             username: req.body.username,
+//             passwordHash: bcrypt.hashSync(req.body.passwordHash, 10),
+//             role: req.body.role,
+//             branch:req.body.branch
+//         });
+//        const save =  user.save((error,result)=>{
+//            if(error){
+//             return res.status(500).send(error);
+//            }
+//            res.send(result.result);
+//        });
+//     }else{
+//         return res.status(404).send("User already exist!")
+//    }
+//    });
+// });
 router.post("/addtrDetails", (request, response) => {
      
     var query = { truckNo: request.body.truckNo };
@@ -66,42 +64,43 @@ router.post("/addtrDetails", (request, response) => {
     });
 });/*employees att post */
 
-router.post("/addEmployee_att", (request, response) => {
-    var nowDate = new Date(); 
-    var date = nowDate.getFullYear()+'/'+(nowDate.getMonth()+1)+'/'+nowDate.getDate(); 
-    var query = { date: request.body.date, emp_id: request.body.emp_id };
-	collection_att.find(query).toArray((err,result1)=>{
-		if (err) throw err;
-         var getQuery = result1;
-        //  console.log(getQuery);
-     if(getQuery.length === 0){
-    collection_att.insertOne(request.body, (error, result) => {
-        if(error) {
-            return response.status(500).send(error);
-        }
-        response.send(result.result);
-    });}else{
-               return response.status(500).send("Attendance already exist!")
-          }
-        /*console.log(getQuery.length);*/
-    });
-});
-/*remove employee*/
-router.delete("/removeEmployee/:userName",(req,res)=>{
-    collection.deleteOne(req.params,(err,result)=>{
-    if(err){
-        return res.status(404).send(err)
-    }res.send(result);
-});
-});
+// router.post("/addEmployee_att", (request, response) => {
+//     var nowDate = new Date(); 
+//     var date = nowDate.getFullYear()+'/'+(nowDate.getMonth()+1)+'/'+nowDate.getDate(); 
+//     var query = { date: request.body.date, emp_id: request.body.emp_id };
+// 	collection_att.find(query).toArray((err,result1)=>{
+// 		if (err) throw err;
+//          var getQuery = result1;
+//         //  console.log(getQuery);
+//      if(getQuery.length === 0){
+//     collection_att.insertOne(request.body, (error, result) => {
+//         if(error) {
+//             return response.status(500).send(error);
+//         }
+//         response.send(result.result);
+//     });}else{
+//                return response.status(500).send("Attendance already exist!")
+//           }
+//         /*console.log(getQuery.length);*/
+//     });
+// });
+
+// /*remove employee*/
+// router.delete("/removeEmployee/:userName",(req,res)=>{
+//     collection.deleteOne(req.params,(err,result)=>{
+//     if(err){
+//         return res.status(404).send(err)
+//     }res.send(result);
+// });
+// });
 /*update employee*/
-router.post("/updateEmployee",(req,res)=>{
-   let dbQuery ={userName:req.body.userName};
-   let updateSet = {$set:req.body}
-    collection.updateOne(dbQuery,updateSet,(err,result)=>{
+router.post("/updatetrDetails",(req,res)=>{
+   let dbQuery ={truckNo:req.body.truckNo};
+   let updateSet = {$set:req.body};
+    collection_trDetails.updateOne(dbQuery,updateSet,(err,result)=>{
     if(err){
         return res.status(404).send(err)
-    }res.send(result);
+    }res.status(200).send(result);
     });
 });
 /*data get*/
@@ -114,14 +113,14 @@ router.post("/updateEmployee",(req,res)=>{
     });
 });
 /*get attendance*/
- router.get("/getEmployee_att", (request, response) => {
-    collection_att.find({}).toArray((error, result) => {
-        if(error) {
-            return response.status(500).send(error);
-        }
-        response.send(result);
-    });
-});
+//  router.get("/getEmployee_att", (request, response) => {
+//     collection_att.find({}).toArray((error, result) => {
+//         if(error) {
+//             return response.status(500).send(error);
+//         }
+//         response.send(result);
+//     });
+// });
 
 
 

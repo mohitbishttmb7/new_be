@@ -10,7 +10,7 @@ const { Collection } = require('mongoose');
 const CONNECTION_URL = config.connectionString;
 const DATABASE_NAME = "myFirstDatabase";
 
-MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false }, (error, client) => {
+MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true,  useUnifiedTopology: true, }, (error, client) => {
     if(error) {
         throw error;
     }
