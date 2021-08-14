@@ -16,6 +16,8 @@ MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology:
     }
     database = client.db(DATABASE_NAME);
     collection_trDetails = database.collection("trDetails");
+    collection_trDetailsV = database.collection("trVendor");
+    collection_trDetailsB = database.collection("trBills");
     // console.log("Connected to `" + DATABASE_NAME + "`!");
 });
 // router.post("/addUser",(req,res)=>{
@@ -62,6 +64,47 @@ router.post("/addtrDetails", (request, response) => {
           }
         console.log(getQuery.length);
     });
+});
+//add vendor
+router.post("/addVendor", (request, response) => {
+     
+    var query = { vendorName: request.body.vendorName };
+	collection_trDetailsV.find(query).toArray((err,result1)=>{
+		if (err) throw err;
+         var getQuery = result1;
+        //  console.log(getQuery);
+     if(getQuery.length === 0){
+        collection_trDetailsV.insertOne(request.body, (error, result) => {
+        if(error) {
+            return response.status(500).send(error);
+        }
+        response.send(result.result);
+    });}else{
+        console.log(request.body);
+               return response.status(500).send("Truck already exist!")
+          }
+        console.log(getQuery.length);
+    });
+});
+//add bill
+router.post("/addBill", (request, response) => {
+     
+    collection_trDetailsB.insertOne(request.body, (error, result) => {
+        if(error) {
+            return response.status(500).send(error);
+        }
+        response.send(result.result);
+    });
+    // var query = { billNo: request.body.billNo };
+	// collection_trDetailsB.find(query).toArray((err,result1)=>{
+	// 	if (err) throw err;
+    //      var getQuery = result1;
+    //     //  console.log(getQuery);
+    //  if(getQuery.length != 0){}else{
+    //            return response.status(500).send("Truck already exist!")
+    //       }
+    //     console.log(getQuery.length);
+    // });
 });/*employees att post */
 
 // router.post("/addEmployee_att", (request, response) => {
@@ -106,6 +149,24 @@ router.post("/updatetrDetails",(req,res)=>{
 /*data get*/
  router.get("/getTrDetails", (request, response) => {
     collection_trDetails.find({}).toArray((error, result) => {
+        if(error) {
+            return response.status(500).send(error);
+        }
+        response.send(result);
+    });
+});
+/*vendor get*/
+ router.get("/getVendor", (request, response) => {
+    collection_trDetailsV.find({}).toArray((error, result) => {
+        if(error) {
+            return response.status(500).send(error);
+        }
+        response.send(result);
+    });
+});
+/*vendor get*/
+ router.get("/getBills", (request, response) => {
+    collection_trDetailsB.find({}).toArray((error, result) => {
         if(error) {
             return response.status(500).send(error);
         }
