@@ -68,7 +68,7 @@ router.post("/addtrDetails", (request, response) => {
 //add vendor
 router.post("/addVendor", (request, response) => {
      
-    var query = { vendorName: request.body.vendorName };
+    var query = { vendorNames: request.body.vendorNames };
 	collection_trDetailsV.find(query).toArray((err,result1)=>{
 		if (err) throw err;
          var getQuery = result1;
@@ -164,7 +164,7 @@ router.post("/updatetrDetails",(req,res)=>{
         response.send(result);
     });
 });
-/*vendor get*/
+/*bills get*/
  router.get("/getBills", (request, response) => {
     collection_trDetailsB.find({}).toArray((error, result) => {
         if(error) {
@@ -172,6 +172,18 @@ router.post("/updatetrDetails",(req,res)=>{
         }
         response.send(result);
     });
+});
+
+/*remove bill*/
+router.delete("/removeB/:_id",(req,res)=>{
+    let mongoose = require('mongoose');
+    let id = mongoose.Types.ObjectId(req.params._id);
+    console.log(id);
+    collection_trDetailsB.deleteOne({_id:id},(err,result)=>{
+    if(err){
+        return res.status(404).send(err)
+    }res.send(result);
+});
 });
 /*get attendance*/
 //  router.get("/getEmployee_att", (request, response) => {
