@@ -68,7 +68,7 @@ router.post("/addtrDetails", (request, response) => {
 //add vendor
 router.post("/addVendor", (request, response) => {
      
-    var query = { vendorNames: request.body.vendorNames };
+    var query = { vendorName: request.body.vendorName };
 	collection_trDetailsV.find(query).toArray((err,result1)=>{
 		if (err) throw err;
          var getQuery = result1;
